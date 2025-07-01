@@ -308,9 +308,14 @@ class ModelStatisticsProcessor:
             md5_hash = self.generate_md5(phone)
             model_name = md5_model_map.get(md5_hash, "")  # Empty string if no match
             
-            if model_name:
-                matched_count += 1
+            if not model_name:
+                print(f"错误：已接通数据/A意向数据，在底包中找不到电话号码对应的md5: {phone}")
+                print(f"MD5哈希: {md5_hash}")
+                print(f"此电话号码在底包中没有匹配的md5。")
+                print("由于存在未匹配的电话号码，处理已停止。")
+                return False
             
+            matched_count += 1
             output_data.append([phone, md5_hash, model_name])
         
         print(f"Matched {matched_count} out of {len(phone_numbers)} phone numbers")
